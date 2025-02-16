@@ -1,0 +1,114 @@
+<!-- HTML : Структурата на формуляра с входове и етикети.
+CSS : Някои основни стилове.
+JavaScript : Добавяне на слушатели на събития и логика за валидиране. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 400px;
+        margin: auto;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .error {
+        color: red;
+        font-size: 12px;
+      }
+      .disabled {
+        background-color: grey;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="userForm">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" />
+        <div class="error" id="usernameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" />
+        <div class="error" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+        <div class="error" id="passwordError"></div>
+      </div>
+      <button type="submit" id="submitBtn" class="disabled" disabled>
+        Submit
+      </button>
+    </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("userForm");
+        const username = document.getElementById("username");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const submitBtn = document.getElementById("submitBtn");
+
+        const errors = {
+          username: "Username must be at least 3 characters.",
+          email: "Enter a valid email.",
+          password: "Password must be at least 6 characters.",
+        };
+
+        const validateInput = (input, rule, errorElement) => {
+          if (!rule(input.value)) {
+            errorElement.textContent = errors[input.name];
+            return false;
+          } else {
+            errorElement.textContent = "";
+            return true;
+          }
+        };
+
+        const checkFormValidity = () => {
+          const isValid = [
+            validateInput(
+              username,
+              (val) => val.length >= 3,
+              document.getElementById("usernameError")
+            ),
+            validateInput(
+              email,
+              (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+              document.getElementById("emailError")
+            ),
+            validateInput(
+              password,
+              (val) => val.length >= 6,
+              document.getElementById("passwordError")
+            ),
+          ];
+
+          if (isValid.every((valid) => valid)) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("disabled");
+          } else {
+            submitBtn.disabled = true;
+            submitBtn.classList.add("disabled");
+          }
+        };
+
+        [username, email, password].forEach((input) => {
+          input.addEventListener("input", () => checkFormValidity());
+        });
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          alert("Form submitted successfully!");
+        });
+      });
+    </script>
+  </body>
+</html>
