@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prize Registration</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        max-width: 300px;
+        margin: auto;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+        color: black;
+        text-align: left;
+      }
+
+      label.red {
+        color: red;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+      }
+
+      .error {
+        color: red;
+        font-size: 12px;
+        display: block;
+        text-align: left;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 10px;
+      }
+
+      button:disabled {
+        background: grey;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Register for a Prize</h1>
+    <form id="registrationForm">
+      <span class="error">First name is required.</span>
+      <label class="red"
+        >First Name:
+        <input type="text" id="firstName" />
+        <span class="error" id="firstNameError"></span>
+      </label>
+
+      <label
+        >Last Name:
+        <input type="text" id="lastName" />
+        <span class="error" id="lastNameError"></span>
+      </label>
+
+      <span class="error">Email is required.</span>
+      <label class="red"
+        >Email:
+        <input type="email" id="email" />
+        <span class="error" id="emailError"></span>
+      </label>
+
+      <span class="error">Age is required and must be 18 or older.</span>
+      <label class="red"
+        >Age:
+        <input type="number" id="age" />
+        <span class="error" id="ageError"></span>
+      </label>
+
+      <button type="submit" id="submitBtn" disabled>Submit</button>
+    </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registrationForm");
+        const firstName = document.getElementById("firstName");
+        const lastName = document.getElementById("lastName");
+        const email = document.getElementById("email");
+        const age = document.getElementById("age");
+        const submitBtn = document.getElementById("submitBtn");
+
+        const validateInput = (input, errorId, validationFn) => {
+          const errorElement = document.getElementById(errorId);
+          const errorMessage = validationFn(input.value);
+          errorElement.textContent = errorMessage;
+          checkErrors();
+        };
+
+        const checkErrors = () => {
+          const errors = [
+            firstName.value.trim() === "",
+            lastName.value.trim() === "",
+            email.value.trim() === "",
+            age.value.trim() === "" || parseInt(age.value) < 18,
+          ];
+          submitBtn.disabled = errors.includes(true);
+        };
+
+        firstName.addEventListener("input", () => {
+          validateInput(firstName, "firstNameError", (value) =>
+            value ? "" : "First name is required."
+          );
+        });
+
+        lastName.addEventListener("input", () => {
+          validateInput(lastName, "lastNameError", (value) =>
+            value ? "" : "Last name is required."
+          );
+        });
+
+        email.addEventListener("input", () => {
+          validateInput(email, "emailError", (value) =>
+            value ? "" : "Email is required."
+          );
+        });
+
+        age.addEventListener("input", () => {
+          validateInput(age, "ageError", (value) =>
+            value && parseInt(value) >= 18
+              ? ""
+              : "Age is required and must be 18 or older."
+          );
+        });
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          alert("Form submitted successfully!");
+        });
+      });
+    </script>
+  </body>
+</html>
