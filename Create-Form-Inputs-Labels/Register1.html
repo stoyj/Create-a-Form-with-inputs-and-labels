@@ -156,6 +156,11 @@
       inputs.forEach((input) => {
         input.addEventListener("input", validate);
       });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Form submitted successfully!");
+      });
     </script>
   </body>
 </html>
